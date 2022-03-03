@@ -26,11 +26,11 @@ const githubService = {
     })
     if (response.statusText === 'OK') {
       comments.push(...response.data)
-      console.log(response.statusText, response.data.length)
-      console.log(response.headers, response.headers['link'])
+      // console.log(response.statusText, response.data.length)
+      // console.log(response.headers, response.headers['link'])
       if (response.headers['link'] !== undefined) {
         let routes = await getRoutes(response.headers['link'])
-        console.log(routes)
+        // console.log(routes)
 
         for (const url of routes) {
           let result
@@ -38,10 +38,10 @@ const githubService = {
             headers: headers,
           })
           comments.push(...result.data)
-          console.log(result.data.length)
+          // console.log(result.data.length)
         }
       }
-      console.log(comments.length)
+      // console.log(comments.length)
       let users = []
       await comments.map((stats) => {
         if (typeOfOperation === 'comments') {
@@ -60,11 +60,37 @@ const githubService = {
           }
         }
       })
-      console.log(users)
+      // console.log(users)
       let commentsData = await getCommentData(users)
-      console.log(commentsData)
+      // console.log(commentsData)
       return commentsData
     }
+  },
+
+  async getGitStatsData(repo) {
+    const commentsData = []
+
+    let response = await axios.get(
+      `${config.BaseURL}${repo}${config.StatsURL}`,
+      {
+        headers: headers,
+      },
+    )
+
+    if (response.statusText === 'OK') {
+      await response.data.map((stats) => {
+        if (stats.author['login']) {
+          commentsData.push({
+            login: stats.author['login'],
+            comments: 0,
+            total: stats.total,
+          })
+        }
+      })
+    }
+
+    // console.log(commentsData)
+    return commentsData
   },
 }
 

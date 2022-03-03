@@ -1,5 +1,5 @@
 module.exports = async function (link) {
-  console.log(link)
+  // console.log(link)
   let routes = []
   let nextURL = ''
   let lastURL = ''
@@ -21,12 +21,12 @@ module.exports = async function (link) {
 
     next = await nextURL.replace(nextBegin, '')
     last = await lastURL.replace(lastBegin, '')
-    console.log(next, last)
+    // console.log(next, last)
     const pattern = /.*(\?page=)|(&per_page=).*/
     const regex = new RegExp(pattern, 'g')
     const nextInt = parseInt(next.replace(regex, ''), 0)
     const lastInt = parseInt(last.replace(regex, ''), 0)
-    console.log(nextInt, lastInt)
+    // console.log(nextInt, lastInt)
     let url = ''
     const begin = /.*(\?page=)/
     const end = /(&per_page=).*/

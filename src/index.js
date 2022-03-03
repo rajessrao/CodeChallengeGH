@@ -1,6 +1,7 @@
 const minimist = require('minimist')
 const chalk = require('chalk')
 const config = require('./config')
+let comments = require('./controllers/commentsController')
 
 console.log(chalk.yellow('Your github token is:'))
 console.info(chalk.yellow(config.GITHUB_PERSONAL_ACCESS_TOKEN))
@@ -26,6 +27,7 @@ if (typeof repo === 'string' && repo.match(/(\w)|(\/)|(-)/g)) {
   }
   // console.log(dateISOString)
   console.log(`Fetching comments for past ${days} days for ${repo}`)
+  comments(repo, dateISOString)
 } else {
   console.log('Invalid repo, try again with valid repo.')
 }

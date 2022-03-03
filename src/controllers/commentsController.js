@@ -1,4 +1,6 @@
 const githubService = require('../services/githubService')
+const refineData = require('../helpers/refineData')
+const reportData = require('../helpers/reportData')
 
 module.exports = async function (repo, dateISOString) {
   let comments = await githubService.getGitData(repo, dateISOString, 'comments')
@@ -8,20 +10,25 @@ module.exports = async function (repo, dateISOString) {
   let totalData = []
 
   if (comments.length) {
-    totalData.push(...comments)
+    totalData.push(comments)
   }
 
   if (issues.length) {
-    totalData.push(...issues)
+    totalData.push(issues)
   }
 
   if (pulls.length) {
-    totalData.push(...pulls)
+    totalData.push(pulls)
   }
 
   if (stats.length) {
-    totalData.push(...stats)
+    totalData.push(stats)
   }
 
-  console.log('totalData ::::::::::::::::::::: \n', totalData)
+  // console.log('totalData ::::::::::::::::::::: \n', totalData)
+
+  let refinedData = await refineData(totalData)
+
+  // Data report
+  reportData(refinedData)
 }

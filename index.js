@@ -1,6 +1,6 @@
 const minimist = require('minimist')
 const chalk = require('chalk')
-let comments = require('./src/controllers/commentsController')
+let commentsController = require('./src/controllers/commentsController')
 
 let argv = minimist(process.argv)
 
@@ -29,7 +29,7 @@ if (typeof repo === 'string' && repo.match(/(\w)|(\/)|(-)/g)) {
   console.log('\n')
 
   // Start getting comments data
-  comments(repo, dateISOString)
+  commentsController.getComments(repo, dateISOString)
 } else {
   console.log(chalk.red('Invalid repo, try again with valid repo.'))
 }

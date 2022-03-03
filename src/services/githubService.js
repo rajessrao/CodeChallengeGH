@@ -1,7 +1,7 @@
 const axios = require('axios').default
 const config = require('../config')
-const getRoutes = require('../helpers/urls')
-const getCommentData = require('../helpers/commentsData')
+const urls = require('../helpers/urls')
+const commentsHelper = require('../helpers/commentsData')
 const headers = {
   Accept: 'application/vnd.github.v3+json',
   Authorization: `token ${config.GITHUB_PERSONAL_ACCESS_TOKEN}`,
@@ -16,14 +16,14 @@ const githubService = {
     since += '&sort=created&direction=desc'
 
     // Getting endpoint from config based on typeOfOperation
-    let endURL =
-      typeOfOperation === 'comments'
-        ? config.CommentsURL
-        : typeOfOperation === 'issues'
-          ? config.IssuesURL + since
-          : typeOfOperation === 'pulls'
-            ? config.PullsURL + since
-            : ''
+    let endURL
+    if (typeOfOperation === 'comments') {
+      endURL = config.CommentsURL
+    } else if (typeOfOperation === 'issues') {
+      endURL = config.IssuesURL + since
+    } else if (typeOfOperation === 'pulls') {
+      endURL = config.PullsURL + since
+    }
 
     const date = new Date(dateISOString)
 
@@ -33,13 +33,11 @@ const githubService = {
     })
 
     if (response.statusText === 'OK') {
-
       // Pushing data to comments array
       comments.push(...response.data)
       if (response.headers['link'] !== undefined) {
-
         // if there is a link in headers, then generating all the links with the page number
-        let routes = await getRoutes(response.headers['link'])
+        let routes = await urls.getURLs(response.headers['link'])
 
         // GitHub API get call for all pages and pushing data to comments array
         for (const url of routes) {
@@ -72,7 +70,7 @@ const githubService = {
       })
 
       // Templating the comments data
-      let commentsData = await getCommentData(users)
+      let commentsData = await commentsHelper.getCommentsData(users)
       return commentsData
     }
   },

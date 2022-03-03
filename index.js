@@ -1,7 +1,7 @@
 const minimist = require('minimist')
 const chalk = require('chalk')
-const config = require('./config')
-let comments = require('./controllers/commentsController')
+const config = require('./src/config')
+let comments = require('./src/controllers/commentsController')
 
 // console.log(chalk.yellow('Your github token is:'))
 // console.info(chalk.yellow(config.GITHUB_PERSONAL_ACCESS_TOKEN))

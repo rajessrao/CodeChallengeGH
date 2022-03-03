@@ -8,6 +8,7 @@ module.exports = function(users) {
     let login = user.login
     let commits = user.total
 
+    // Logging report data
     console.log(`${comments} comments, ${login} (${commits} commits)`)
   })
 }

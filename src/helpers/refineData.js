@@ -2,6 +2,7 @@ module.exports = async function (totalData) {
   let users = []
   let uniqUsers = []
 
+  // Add number of array objects to one array
   await totalData.map((response) => {
     response.map((data) => {
       users.push(data)
@@ -14,10 +15,10 @@ module.exports = async function (totalData) {
     }
   })
 
-  // Return combined user data
+  // Return refined user data
   await uniqUsers.map((login, i) => {
     users.map((user) => {
-      // Set first loop values
+      // Initial values
       let comments = 0
       let total = 0
 
@@ -46,6 +47,5 @@ module.exports = async function (totalData) {
   // Sort by Comments
   let sortedUsers = await uniqUsers.sort((a, b) => b.comments - a.comments)
 
-  // console.log(sortedUsers)
   return sortedUsers
 }

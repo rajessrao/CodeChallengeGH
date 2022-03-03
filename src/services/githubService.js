@@ -10,8 +10,12 @@ const headers = {
 const githubService = {
   async getGitData(repo, dateISOString, typeOfOperation) {
     let comments = []
+
+    // since parameter for issues and pulls API
     let since = '&since=' + dateISOString
     since += '&sort=created&direction=desc'
+
+    // Getting endpoint from config based on typeOfOperation
     let endURL =
       typeOfOperation === 'comments'
         ? config.CommentsURL
@@ -20,29 +24,35 @@ const githubService = {
           : typeOfOperation === 'pulls'
             ? config.PullsURL + since
             : ''
+
     const date = new Date(dateISOString)
+
+    // GitHub API get call
     let response = await axios.get(`${config.BaseURL}${repo}${endURL}`, {
       headers: headers,
     })
-    if (response.statusText === 'OK') {
-      comments.push(...response.data)
-      // console.log(response.statusText, response.data.length)
-      // console.log(response.headers, response.headers['link'])
-      if (response.headers['link'] !== undefined) {
-        let routes = await getRoutes(response.headers['link'])
-        // console.log(routes)
 
+    if (response.statusText === 'OK') {
+
+      // Pushing data to comments array
+      comments.push(...response.data)
+      if (response.headers['link'] !== undefined) {
+
+        // if there is a link in headers, then generating all the links with the page number
+        let routes = await getRoutes(response.headers['link'])
+
+        // GitHub API get call for all pages and pushing data to comments array
         for (const url of routes) {
           let result
           result = await axios.get(url, {
             headers: headers,
           })
           comments.push(...result.data)
-          // console.log(result.data.length)
         }
       }
-      // console.log(comments.length)
+
       let users = []
+      // Filtering data by DateTime if 'comments', otherwise ignoring Datetime in case of 'issues' and 'pulls'
       await comments.map((stats) => {
         if (typeOfOperation === 'comments') {
           let fetchDate = new Date(stats.created_at)
@@ -60,9 +70,9 @@ const githubService = {
           }
         }
       })
-      // console.log(users)
+
+      // Templating the comments data
       let commentsData = await getCommentData(users)
-      // console.log(commentsData)
       return commentsData
     }
   },
@@ -70,6 +80,7 @@ const githubService = {
   async getGitStatsData(repo) {
     const commentsData = []
 
+    // GitHub API get call
     let response = await axios.get(
       `${config.BaseURL}${repo}${config.StatsURL}`,
       {
@@ -78,6 +89,7 @@ const githubService = {
     )
 
     if (response.statusText === 'OK') {
+      // Filtering and Templating the comments data
       await response.data.map((stats) => {
         if (stats.author['login']) {
           commentsData.push({
@@ -89,7 +101,6 @@ const githubService = {
       })
     }
 
-    // console.log(commentsData)
     return commentsData
   },
 }

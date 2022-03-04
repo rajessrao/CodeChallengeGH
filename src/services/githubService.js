@@ -8,8 +8,9 @@ const headers = {
 }
 
 const githubService = {
-  async getGitData(repo, dateISOString, typeOfOperation) {
+  async getGitData(args) {
     try {
+      let { repo, dateISOString, typeOfOperation } = args
       let comments = []
 
       // since parameter for issues and pulls API
@@ -41,13 +42,17 @@ const githubService = {
           let routes = await urls.getURLs(response.headers['link'])
 
           // GitHub API get call for all pages and pushing data to comments array
+          let axiosGetCalls = []
           for (const url of routes) {
-            let result
-            result = await axios.get(url, {
-              headers: headers,
-            })
-            comments.push(...result.data)
+            axiosGetCalls.push(
+              axios.get(url, {
+                headers: headers,
+              }),
+            )
           }
+
+          const res = await Promise.all(axiosGetCalls)
+          comments.push(res.map((res) => res.data))
         }
 
         let users = []

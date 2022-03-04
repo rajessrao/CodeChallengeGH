@@ -6,13 +6,21 @@ const commentsController = {
   async getComments(repo, dateISOString) {
     try {
       // Fetching comments data with comments, issues, pulls and stats
-      let comments = await githubService.getGitData(
+      let comments = await githubService.getGitData({
         repo,
         dateISOString,
-        'comments',
-      )
-      let issues = await githubService.getGitData(repo, dateISOString, 'issues')
-      let pulls = await githubService.getGitData(repo, dateISOString, 'pulls')
+        typeOfOperation: 'comments',
+      })
+      let issues = await githubService.getGitData({
+        repo,
+        dateISOString,
+        typeOfOperation: 'issues',
+      })
+      let pulls = await githubService.getGitData({
+        repo,
+        dateISOString,
+        typeOfOperation: 'pulls',
+      })
       let stats = await githubService.getGitStatsData(repo)
 
       // Putting all data together

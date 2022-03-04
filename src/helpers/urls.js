@@ -1,4 +1,9 @@
 const urls = {
+  /**
+   * This function will read the link string from header and return array of paginated routes till last page
+   * @param {string} link - The link which we got from the first github API call contains next and last URL
+   * @returns {array} routes - Retrurns array of all paginated routes till the last page
+   */
   async getURLs(link) {
     try {
       // Initial values

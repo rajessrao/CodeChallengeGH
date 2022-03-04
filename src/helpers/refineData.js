@@ -1,4 +1,9 @@
 const refineData = {
+  /**
+   * This function will wrapp all data into one array and get unique users and sorted out the data
+   * @param {object} totalData - complete comments from the github APIs
+   * @returns {object} sortedUsers - unique sorted response
+   */
   async getRefinedData(totalData) {
     try {
       let users = []

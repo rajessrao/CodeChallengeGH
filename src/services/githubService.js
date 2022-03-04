@@ -8,6 +8,12 @@ const headers = {
 }
 
 const githubService = {
+  /**
+   * This function will get comments from github API (Comments API, issues API and pulls API)
+   * @param {object} args - Object which contains repo, dateISOString and typeOfOperation
+   * @returns {object} commentsData - comments data
+   * typeOfOperation will be a string and possible values are 'comments' or 'pulls', or 'issues'
+   */
   async getGitData(args) {
     try {
       let { repo, dateISOString, typeOfOperation } = args
@@ -84,6 +90,11 @@ const githubService = {
     }
   },
 
+  /**
+   * This function will get comments from github stats API
+   * @param {string} repo - repo name which we need to get comments
+   * @returns {object} commentsData - comments data
+   */
   async getGitStatsData(repo) {
     try {
       const commentsData = []

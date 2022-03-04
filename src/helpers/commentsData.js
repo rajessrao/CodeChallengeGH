@@ -1,4 +1,9 @@
 const commentsHelper = {
+  /**
+   * This function will format the users data to an data template for reporting
+   * @param {object} users - users object
+   * @returns {object} comments - as formatted data template
+   */
   async getCommentsData(users) {
     try {
       const comments = []

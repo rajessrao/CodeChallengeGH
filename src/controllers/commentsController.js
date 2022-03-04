@@ -3,6 +3,11 @@ const refineData = require('../helpers/refineData')
 const reportData = require('../helpers/reportData')
 
 const commentsController = {
+  /**
+   * This function will get comments using github API and sort the data and report it into console
+   * @param {string} repo - repo name which we need to get comments
+   * @param {string} dateISOString - date as ISOString format
+   */
   async getComments(repo, dateISOString) {
     try {
       // Fetching comments data with comments, issues, pulls and stats

@@ -2,6 +2,9 @@ const minimist = require('minimist')
 const chalk = require('chalk')
 let commentsController = require('./src/controllers/commentsController')
 
+/**
+ * Begin with validating repo and period then getting comments and do process
+ */
 try {
   let argv = minimist(process.argv)
 
